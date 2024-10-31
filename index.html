@@ -54,29 +54,38 @@
             <!-- Consumer Details Section -->
             <div id="consumerDetails" style="display: none;">
                 <h2>Section 2: Consumer Details</h2>
-                <label for="newOrUpgrade">New or Upgrade *</label>
-                <select id="newOrUpgrade" name="newOrUpgrade">
-                    <option value="">Select Option</option>
-                    <option value="New">New</option>
-                    <option value="Upgrade">Upgrade</option>
-                </select>
-
-                <label for="whatWasSold">What was Sold *</label>
-                <select id="whatWasSold" name="whatWasSold">
-                    <option value="SIMO">SIMO</option>
-                    <option value="EVO">EVO</option>
-                    <option value="HBB">HBB</option>
-                    <option value="WATCH">WATCH</option>
-                    <option value="Mi-Fi/Watch">Mi-Fi/Watch</option>
-                </select>
-
                 <label for="idvResult">IDV Result *</label>
                 <select id="idvResult" name="idvResult">
                     <option value="Pass">Pass</option>
                     <option value="Decline">Decline (Manager Must Sign Off)</option>
                     <option value="Data Amend">Data Amend</option>
-                    <option value="N/A">N/A</option>
+                    <option value="AlternativeProofs">Alternative Proofs</option>
                 </select>
+
+                <!-- Alternative Proofs Checklist -->
+                <div id="alternativeProofsSection" style="display: none;">
+                    <h4>Alternative Proofs Used *</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="alternativeProofs" value="Bank Statement"> Bank Statement</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Driving Licence"> Driving Licence</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Passport"> Passport</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Student Card"> Student Card</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Mortgage/Tenancy Letter"> Mortgage/Tenancy Letter</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="University Acceptance/Offer Letter"> University Acceptance/Offer Letter</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Utility Bill"> Utility Bill</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="Council Tax Bill"> Council Tax Bill</label>
+                        <label><input type="checkbox" name="alternativeProofs" value="National ID Card"> National ID Card</label>
+                    </div>
+                </div>
+
+                <!-- Confirm Card Usage (Only shown if IDV Result is not Alternative Proofs) -->
+                <div id="cardUsageSection">
+                    <label for="cardUsageConfirm">Confirm that one card was used once *</label>
+                    <select id="cardUsageConfirm" name="cardUsageConfirm">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Business Details Section -->
@@ -92,45 +101,36 @@
                 <!-- Sole Trader Section -->
                 <div id="soleTraderDetails" style="display: none;">
                     <h3>Sole Trader Details</h3>
-                    <div class="proof-section">
+                    <label for="is36Months">Is it a 36-Month Airtime Contract? *</label>
+                    <select id="is36Months" name="is36Months" required>
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+
+                    <div id="proofOfBusinessSection" style="display: none;">
                         <h4>Proof of Business *</h4>
                         <div class="checkbox-group">
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Business Bank Statement">
-                                Business Bank Statement
-                            </label>
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Tax Return">
-                                Tax Return
-                            </label>
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Invoice">
-                                Invoice
-                            </label>
+                            <label><input type="checkbox" name="proofOfBusiness" value="Business Bank Statement"> Business Bank Statement</label>
+                            <label><input type="checkbox" name="proofOfBusiness" value="Tax Return"> Tax Return</label>
+                            <label><input type="checkbox" name="proofOfBusiness" value="Invoice"> Invoice</label>
                         </div>
                     </div>
-                </div>
 
-                <!-- LTD Company Section -->
-                <div id="ltdCompanyDetails" style="display: none;">
-                    <h3>LTD Company Details</h3>
-                    <div class="proof-section">
-                        <h4>Proofs Required *</h4>
-                        <div class="checkbox-group">
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Company Registration">
-                                Company Registration
-                            </label>
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Business Utility Bill">
-                                Business Utility Bill
-                            </label>
-                            <label>
-                                <input type="checkbox" name="proofOfBusiness" value="Bank Statement">
-                                Bank Statement
-                            </label>
-                        </div>
-                    </div>
+                    <label for="idvResultSoleTrader">IDV Result *</label>
+                    <select id="idvResultSoleTrader" name="idvResultSoleTrader">
+                        <option value="Pass">Pass</option>
+                        <option value="Decline">Decline (Manager Must Sign Off)</option>
+                        <option value="Data Amend">Data Amend</option>
+                        <option value="N/A">N/A</option>
+                    </select>
+
+                    <label for="callValidate">Call Validation Passed *</label>
+                    <select id="callValidate" name="callValidate">
+                        <option value="Pass">Pass</option>
+                        <option value="Fail">Fail</option>
+                        <option value="N/A">N/A</option>
+                    </select>
                 </div>
             </div>
 
@@ -145,26 +145,27 @@
         document.addEventListener("DOMContentLoaded", () => {
             const accountTypeDropdown = document.getElementById('accountType');
             const productDropdown = document.getElementById('product');
+            const idvResultDropdown = document.getElementById('idvResult');
+            const alternativeProofsSection = document.getElementById('alternativeProofsSection');
+            const cardUsageSection = document.getElementById('cardUsageSection');
             const salesForm = document.getElementById("salesForm");
             const consumerDetailsSection = document.getElementById('consumerDetails');
             const businessDetailsSection = document.getElementById('businessDetails');
             const soleTraderOrLtdDropdown = document.getElementById('soleTraderOrLtd');
             const soleTraderDetailsSection = document.getElementById('soleTraderDetails');
             const ltdCompanyDetailsSection = document.getElementById('ltdCompanyDetails');
+            const is36MonthsDropdown = document.getElementById('is36Months');
+            const proofOfBusinessSection = document.getElementById('proofOfBusinessSection');
 
             function updateSections() {
                 const accountTypeValue = accountTypeDropdown.value;
                 const productValue = productDropdown.value;
 
-                // Show Consumer Details if Account Type is Consumer and Product is NEW SIMO
                 consumerDetailsSection.style.display = (accountTypeValue === 'Consumer' && productValue === 'NEW SIMO') ? 'block' : 'none';
-                // Show Business Details if Account Type is Business
                 businessDetailsSection.style.display = (accountTypeValue === 'Business') ? 'block' : 'none';
 
-                // Make soleTraderOrLtd required only if Account Type is Business
                 soleTraderOrLtdDropdown.required = accountTypeValue === 'Business';
 
-                // Hide Sole Trader and LTD sections if Account Type is not Business
                 if (accountTypeValue !== 'Business') {
                     soleTraderDetailsSection.style.display = 'none';
                     ltdCompanyDetailsSection.style.display = 'none';
@@ -174,18 +175,26 @@
 
             function updateBusinessDetails() {
                 const businessType = soleTraderOrLtdDropdown.value;
-
-                // Show respective section based on the selection
                 soleTraderDetailsSection.style.display = (businessType === 'Sole Trader') ? 'block' : 'none';
                 ltdCompanyDetailsSection.style.display = (businessType === 'LTD Company') ? 'block' : 'none';
             }
 
-            // Event listeners for dropdowns
+            function updateProofOfBusiness() {
+                proofOfBusinessSection.style.display = is36MonthsDropdown.value === 'Yes' ? 'block' : 'none';
+            }
+
+            function updateAlternativeProofs() {
+                const showAlternativeProofs = idvResultDropdown.value === 'AlternativeProofs';
+                alternativeProofsSection.style.display = showAlternativeProofs ? 'block' : 'none';
+                cardUsageSection.style.display = showAlternativeProofs ? 'none' : 'block';
+            }
+
             accountTypeDropdown.addEventListener('change', updateSections);
             productDropdown.addEventListener('change', updateSections);
             soleTraderOrLtdDropdown.addEventListener('change', updateBusinessDetails);
+            is36MonthsDropdown.addEventListener('change', updateProofOfBusiness);
+            idvResultDropdown.addEventListener('change', updateAlternativeProofs);
 
-            // Handle form submission
             salesForm.addEventListener("submit", (event) => {
                 event.preventDefault();
                 
@@ -195,11 +204,8 @@
                     accountType: accountTypeDropdown.value,
                     sku: document.getElementById('sku').value,
                     product: productDropdown.value,
-                    newOrUpgrade: document.getElementById('newOrUpgrade')?.value,
-                    whatWasSold: document.getElementById('whatWasSold')?.value,
-                    idvResult: document.getElementById('idvResult')?.value,
-                    soleTraderOrLtd: soleTraderOrLtdDropdown.value,
-                    proofOfBusiness: Array.from(document.querySelectorAll('input[name="proofOfBusiness"]:checked')).map(el => el.value)
+                    idvResult: idvResultDropdown.value,
+                    alternativeProofs: Array.from(document.querySelectorAll('input[name="alternativeProofs"]:checked')).map(el => el.value)
                 };
 
                 console.log("Sale data added:", formData);
@@ -208,6 +214,8 @@
                 salesForm.reset();
                 updateSections();
                 updateBusinessDetails();
+                updateProofOfBusiness();
+                updateAlternativeProofs();
             });
         });
     </script>
