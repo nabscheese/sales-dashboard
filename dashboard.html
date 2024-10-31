@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html">Sales Entry</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+
+        <h1>Sales Dashboard</h1>
+
+        <!-- Filter Inputs -->
+        <div class="filter-container">
+            <label for="advisorFilter">Filter by Advisor:</label>
+            <select id="advisorFilter">
+                <option value="">All Advisors</option>
+                <option value="Habib">Habib</option>
+                <option value="Ads">Ads</option>
+                <option value="Ahmed">Ahmed</option>
+                <option value="Esther">Esther</option>
+                <option value="Baysiti">Baysiti</option>
+            </select>
+
+            <label for="dateFilter">Filter by Date:</label>
+            <input type="date" id="dateFilter">
+            <button onclick="applyFilters()">Apply Filters</button>
+        </div>
+
+        <!-- Sales Table -->
+        <table id="salesTable">
+            <thead>
+                <tr>
+                    <th>Advisor</th>
+                    <th>Order Number</th>
+                    <th>Account Type</th>
+                    <th>SKU</th>
+                    <th>Product</th>
+                    <th>New or Upgrade</th>
+                    <th>What was Sold</th>
+                    <th>IDV Result</th>
+                    <th>Sole Trader or LTD Company</th>
+                    <th>Proof of Business</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sales data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const salesTableBody = document.getElementById("salesTable").querySelector("tbody");
+            const advisorFilter = document.getElementById("advisorFilter");
+            const dateFilter = document.getElementById("dateFilter");
+
+            // Function to load sales data from localStorage
+            function loadSalesData() {
+                const salesData = JSON.parse(localStorage.getItem('salesData')) || [];
+                displaySalesData(salesData);
+            }
+
+            // Function to display filtered sales data
+            function displaySalesData(salesData) {
+                salesTableBody.innerHTML = ""; // Clear existing table data
+
+                salesData.forEach(sale => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${sale.advisorName}</td>
+                        <td>${sale.orderNumber}</td>
+                        <td>${sale.accountType}</td>
+                        <td>${sale.sku}</td>
+                        <td>${sale.product}</td>
+                        <td>${sale.newOrUpgrade || ''}</td>
+                        <td>${sale.whatWasSold || ''}</td>
+                        <td>${sale.idvResult || ''}</td>
+                        <td>${sale.soleTraderOrLtd || ''}</td>
+                        <td>${sale.proofOfBusiness ? sale.proofOfBusiness.join(', ') : ''}</td>
+                    `;
+                    salesTableBody.appendChild(row);
+                });
+            }
+
+            // Function to apply filters
+            function applyFilters() {
+                const salesData = JSON.parse(localStorage.getItem('salesData')) || [];
+                const advisor = advisorFilter.value;
+                const date = dateFilter.value;
+
+                const filteredData = salesData.filter(sale => {
+                    const matchesAdvisor = advisor ? sale.advisorName === advisor : true;
+                    const matchesDate = date ? sale.date === date : true;
+                    return matchesAdvisor && matchesDate;
+                });
+
+                displaySalesData(filteredData);
+            }
+
+            loadSalesData();
+        });
+    </script>
+</body>
+</html>

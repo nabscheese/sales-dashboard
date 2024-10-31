@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Entry Form with Conditional Sections</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html">Sales Entry</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+
+        <h1>Sales Entry Form</h1>
+        
+        <form id="salesForm">
+            <!-- Section 1: Basic Information -->
+            <h2>Section 1: Advisor and Basic Information</h2>
+            <label for="advisorName">Advisor Name *</label>
+            <select id="advisorName" name="advisorName" required>
+                <option value="">Select Advisor</option>
+                <option value="Habib">Habib</option>
+                <option value="Ads">Ads</option>
+                <option value="Ahmed">Ahmed</option>
+                <option value="Esther">Esther</option>
+                <option value="Baysiti">Baysiti</option>
+            </select>
+
+            <label for="orderNumber">Last 4 Digits of Order Number *</label>
+            <input type="text" id="orderNumber" name="orderNumber" maxlength="4" required>
+
+            <label for="accountType">Account Type *</label>
+            <select id="accountType" name="accountType" required>
+                <option value="">Select Account Type</option>
+                <option value="Consumer">Consumer</option>
+                <option value="Business">Business</option>
+            </select>
+
+            <label for="sku">Sales SKU *</label>
+            <input type="text" id="sku" name="sku" required>
+
+            <!-- Product Dropdown -->
+            <label for="product">Product *</label>
+            <select id="product" name="product" required>
+                <option value="">Select Product</option>
+                <option value="NEW SIMO">NEW SIMO</option>
+                <option value="NEW VOICE">NEW VOICE</option>
+                <option value="HBB">HBB</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <!-- Consumer Details Section -->
+            <div id="consumerDetails" style="display: none;">
+                <h2>Section 2: Consumer Details</h2>
+                <label for="newOrUpgrade">New or Upgrade *</label>
+                <select id="newOrUpgrade" name="newOrUpgrade">
+                    <option value="">Select Option</option>
+                    <option value="New">New</option>
+                    <option value="Upgrade">Upgrade</option>
+                </select>
+
+                <label for="whatWasSold">What was Sold *</label>
+                <select id="whatWasSold" name="whatWasSold">
+                    <option value="SIMO">SIMO</option>
+                    <option value="EVO">EVO</option>
+                    <option value="HBB">HBB</option>
+                    <option value="WATCH">WATCH</option>
+                    <option value="Mi-Fi/Watch">Mi-Fi/Watch</option>
+                </select>
+
+                <label for="idvResult">IDV Result *</label>
+                <select id="idvResult" name="idvResult">
+                    <option value="Pass">Pass</option>
+                    <option value="Decline">Decline (Manager Must Sign Off)</option>
+                    <option value="Data Amend">Data Amend</option>
+                    <option value="N/A">N/A</option>
+                </select>
+            </div>
+
+            <!-- Business Details Section -->
+            <div id="businessDetails" style="display: none;">
+                <h2>Section 3: Business Details</h2>
+                <label for="soleTraderOrLtd">Sole Trader or LTD Company *</label>
+                <select id="soleTraderOrLtd" name="soleTraderOrLtd">
+                    <option value="">Select Type</option>
+                    <option value="Sole Trader">Sole Trader</option>
+                    <option value="LTD Company">LTD Company</option>
+                </select>
+                
+                <!-- Sole Trader Section -->
+                <div id="soleTraderDetails" style="display: none;">
+                    <h3>Sole Trader Details</h3>
+                    <div class="proof-section">
+                        <h4>Proof of Business *</h4>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Business Bank Statement">
+                                Business Bank Statement
+                            </label>
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Tax Return">
+                                Tax Return
+                            </label>
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Invoice">
+                                Invoice
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LTD Company Section -->
+                <div id="ltdCompanyDetails" style="display: none;">
+                    <h3>LTD Company Details</h3>
+                    <div class="proof-section">
+                        <h4>Proofs Required *</h4>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Company Registration">
+                                Company Registration
+                            </label>
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Business Utility Bill">
+                                Business Utility Bill
+                            </label>
+                            <label>
+                                <input type="checkbox" name="proofOfBusiness" value="Bank Statement">
+                                Bank Statement
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-container">
+                <button type="submit">Add Sale</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const accountTypeDropdown = document.getElementById('accountType');
+            const productDropdown = document.getElementById('product');
+            const salesForm = document.getElementById("salesForm");
+            const consumerDetailsSection = document.getElementById('consumerDetails');
+            const businessDetailsSection = document.getElementById('businessDetails');
+            const soleTraderOrLtdDropdown = document.getElementById('soleTraderOrLtd');
+            const soleTraderDetailsSection = document.getElementById('soleTraderDetails');
+            const ltdCompanyDetailsSection = document.getElementById('ltdCompanyDetails');
+
+            function updateSections() {
+                const accountTypeValue = accountTypeDropdown.value;
+                const productValue = productDropdown.value;
+
+                // Show Consumer Details if Account Type is Consumer and Product is NEW SIMO
+                consumerDetailsSection.style.display = (accountTypeValue === 'Consumer' && productValue === 'NEW SIMO') ? 'block' : 'none';
+                // Show Business Details if Account Type is Business
+                businessDetailsSection.style.display = (accountTypeValue === 'Business') ? 'block' : 'none';
+
+                // Make soleTraderOrLtd required only if Account Type is Business
+                soleTraderOrLtdDropdown.required = accountTypeValue === 'Business';
+
+                // Hide Sole Trader and LTD sections if Account Type is not Business
+                if (accountTypeValue !== 'Business') {
+                    soleTraderDetailsSection.style.display = 'none';
+                    ltdCompanyDetailsSection.style.display = 'none';
+                    soleTraderOrLtdDropdown.value = '';
+                }
+            }
+
+            function updateBusinessDetails() {
+                const businessType = soleTraderOrLtdDropdown.value;
+
+                // Show respective section based on the selection
+                soleTraderDetailsSection.style.display = (businessType === 'Sole Trader') ? 'block' : 'none';
+                ltdCompanyDetailsSection.style.display = (businessType === 'LTD Company') ? 'block' : 'none';
+            }
+
+            // Event listeners for dropdowns
+            accountTypeDropdown.addEventListener('change', updateSections);
+            productDropdown.addEventListener('change', updateSections);
+            soleTraderOrLtdDropdown.addEventListener('change', updateBusinessDetails);
+
+            // Handle form submission
+            salesForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                
+                const formData = {
+                    advisorName: document.getElementById('advisorName').value,
+                    orderNumber: document.getElementById('orderNumber').value,
+                    accountType: accountTypeDropdown.value,
+                    sku: document.getElementById('sku').value,
+                    product: productDropdown.value,
+                    newOrUpgrade: document.getElementById('newOrUpgrade')?.value,
+                    whatWasSold: document.getElementById('whatWasSold')?.value,
+                    idvResult: document.getElementById('idvResult')?.value,
+                    soleTraderOrLtd: soleTraderOrLtdDropdown.value,
+                    proofOfBusiness: Array.from(document.querySelectorAll('input[name="proofOfBusiness"]:checked')).map(el => el.value)
+                };
+
+                console.log("Sale data added:", formData);
+                alert("Sale added successfully!");
+
+                salesForm.reset();
+                updateSections();
+                updateBusinessDetails();
+            });
+        });
+    </script>
+</body>
+</html>
